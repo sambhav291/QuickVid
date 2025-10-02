@@ -272,7 +272,7 @@ function SummariesPage({ session }) {
           ))
         ) : (
           <div className="text-center text-gray-400 py-16 border-2 border-dashed border-gray-700 rounded-lg bg-gray-800/50">
-            <p>You haven't saved any summaries yet.</p>
+          <p>You haven&apos;t saved any summaries yet.</p>
             <p className="text-sm mt-2">Go to the Home page to generate your first one!</p>
           </div>
         )}
@@ -289,7 +289,7 @@ function AboutPage() {
       <div className="prose prose-invert lg:prose-xl text-gray-300 space-y-4 bg-gray-800/70 backdrop-blur-sm p-8 rounded-lg border border-gray-700">
         <p>QuickVid is an AI-powered tool designed to save you time and help you learn faster. By leveraging state-of-the-art language models, we transform long YouTube videos into concise, easy-to-read summaries.</p>
         <p>This project was built with a modern, full-stack TypeScript architecture, utilizing Next.js for a reactive frontend, Nest.js for a robust backend, and Supabase for database and authentication services.</p>
-        <p>Whether you're a student, a professional, or a lifelong learner, QuickVid helps you get the key insights from video content without spending hours watching.</p>
+  <p>Whether you&apos;re a student, a professional, or a lifelong learner, QuickVid helps you get the key insights from video content without spending hours watching.</p>
       </div>
     </div>
   );
