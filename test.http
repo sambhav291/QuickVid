@@ -1,0 +1,7 @@
+POST http://localhost:3000/summarizer
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "url": "https://youtu.be/B-ukcWJzXwc?si=LAZDRrVvWzujroJi"
+}
