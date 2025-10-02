@@ -6,6 +6,15 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 
+// Declare global window types for VANTA
+declare global {
+  interface Window {
+    VANTA: {
+      HALO: (options: Record<string, unknown>) => { destroy: () => void };
+    };
+  }
+}
+
 // --- SVG Icons ---
 const HomeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -24,13 +33,7 @@ const LogOutIcon = () => (
 function VantaBackground() {
   const vantaRef = useRef(null);
   useEffect(() => {
-    // Declare VANTA types for TypeScript to avoid errors
-    const declareVanta = () => {
-      window.VANTA = window.VANTA || {};
-    };
-    declareVanta();
-
-    let vantaEffect = null;
+    let vantaEffect: { destroy: () => void } | null = null;
     const threeScript = document.createElement("script");
     threeScript.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js";
     document.body.appendChild(threeScript);
@@ -69,7 +72,7 @@ function VantaBackground() {
 // --- Main App Component ---
 export default function App() {
   const supabase = createClientComponentClient();
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<any>(null);
   const [page, setPage] = useState('home');
   const [showAuthModal, setShowAuthModal] = useState(false);
 
@@ -101,7 +104,7 @@ export default function App() {
 }
 
 // --- Navigation Component ---
-function Navbar({ session, setPage, setShowAuthModal }) {
+function Navbar({ session, setPage, setShowAuthModal }: { session: any; setPage: any; setShowAuthModal: any }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const supabase = createClientComponentClient();
 
@@ -141,14 +144,14 @@ function Navbar({ session, setPage, setShowAuthModal }) {
 }
 
 // --- Home Page Component ---
-function HomePage({ session, setShowAuthModal, setPage }) {
+function HomePage({ session, setShowAuthModal, setPage }: { session: any; setShowAuthModal: any; setPage: any }) {
   const [url, setUrl] = useState('');
-  const [summary, setSummary] = useState(null);
+  const [summary, setSummary] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSummarize = async (e) => {
+  const handleSummarize = async (e: any) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -156,7 +159,7 @@ function HomePage({ session, setShowAuthModal, setPage }) {
     try {
       const response = await axios.post('http://localhost:3000/summarizer', { url });
       setSummary({ video_url: url, summary_text: response.data.summary, video_title: 'Your New Summary' });
-    } catch (err) {
+    } catch {
       setError('Failed to generate summary. The API might be down or rate-limited.');
     } finally {
       setIsLoading(false);
@@ -222,11 +225,11 @@ function HomePage({ session, setShowAuthModal, setPage }) {
 }
 
 // --- Summaries Page Component ---
-function SummariesPage({ session }) {
-  const [summaries, setSummaries] = useState([]);
+function SummariesPage({ session }: { session: any }) {
+  const [summaries, setSummaries] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchSummaries = useCallback(async (token) => {
+  const fetchSummaries = useCallback(async (token: any) => {
     setIsLoading(true);
     try {
       const response = await axios.get('http://localhost:3000/summarizer', {
@@ -296,7 +299,7 @@ function AboutPage() {
 }
 
 // --- Auth Modal Component ---
-function AuthModal({ onClose, supabase }) {
+function AuthModal({ onClose, supabase }: { onClose: any; supabase: any }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 animate-fade-in">
       <div className="relative w-full max-w-md p-8 bg-gray-800 rounded-lg">
