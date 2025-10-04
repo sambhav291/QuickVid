@@ -9,21 +9,21 @@ async function bootstrap() {
   // Enable CORS for website AND Chrome extension
   app.enableCors({
     origin: [
-      'http://localhost:3001',           // Local frontend
-      'http://localhost:3002',           // Alternative frontend port
-      'http://localhost:3000',           // Backend itself
-      /^chrome-extension:\/\//,          // Chrome extensions (QuickVid extension)
-      // Add your production frontend URL here when deploying:
-      // 'https://quickvid.com',
+      'http://localhost:3001',
+      'http://localhost:3002',
+      'http://localhost:3000',
+      /^chrome-extension:\/\//,
+      /^https:\/\/.*\.vercel\.app$/,
+      /^https:\/\/.*\.netlify\.app$/,
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
   
-  const port = process.env.PORT ?? 3000;
-  await app.listen(port);
-  console.log(`🚀 Backend running on http://localhost:${port}`);
-  console.log('✅ CORS enabled for Chrome extensions');
+  const port = process.env.PORT || 3000;
+  await app.listen(port, '0.0.0.0');
+  console.log(`🚀 Backend running on port ${port}`);
+  console.log('✅ CORS enabled for production');
 }
 bootstrap();
