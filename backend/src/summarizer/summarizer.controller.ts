@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Delete, Param, Headers } from '@nestjs/common';
 import { SummarizerService } from './summarizer.service';
-import { SummarizeDto } from './dto/summarize.dto';
+import { SummarizeDto, SaveSummaryDto } from './dto/summarize.dto';
 
 @Controller('summarizer')
 export class SummarizerController {
@@ -18,7 +18,7 @@ export class SummarizerController {
 
   // NEW endpoint to save a summary
   @Post('save')
-  saveSummary(@Body() body: SummarizeDto, @Headers('authorization') authHeader: string) {
+  saveSummary(@Body() body: SaveSummaryDto, @Headers('authorization') authHeader: string) {
     console.log('Save summary request - Auth header:', authHeader);
     
     if (!authHeader) {
@@ -31,7 +31,7 @@ export class SummarizerController {
       throw new Error('Bearer token is missing or malformed');
     }
     
-    return this.summarizerService.summarizeAndSave(body, token);
+    return this.summarizerService.saveEncryptedSummary(body, token);
   }
 
   // This is our NEW endpoint to get all summaries for a user

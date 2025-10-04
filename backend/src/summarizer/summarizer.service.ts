@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { SummarizeDto } from './dto/summarize.dto';
+import { SummarizeDto, SaveSummaryDto } from './dto/summarize.dto';
 import axios from 'axios';
 import { Innertube } from 'youtubei.js';
 
@@ -104,6 +104,38 @@ export class SummarizerService implements OnModuleInit {
       throw new Error(error.message);
     }
     return summaries;
+  }
+
+  // New method to save encrypted summaries
+  async saveEncryptedSummary(dto: SaveSummaryDto, token: string): Promise<any> {
+    console.log('Service received encrypted summary save request');
+    
+    // Use the admin client to get the user from the token
+    const { data: { user }, error: authError } = await this.supabase.auth.getUser(token);
+    
+    if (authError || !user) {
+      console.error('Authentication Error:', authError?.message);
+      throw new UnauthorizedException('Invalid or missing token');
+    }
+
+    // Save encrypted data to database
+    const { data: savedSummary, error: insertError } = await this.supabase
+      .from('summaries')
+      .insert({
+        user_id: user.id,
+        video_url: dto.url,
+        summary_text: dto.encrypted_summary, // Store encrypted summary
+        video_title: dto.encrypted_title,    // Store encrypted title
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error('Database Insert Error:', insertError.message);
+      throw new Error(`Database error: ${insertError.message}`);
+    }
+    
+    return savedSummary;
   }
 
   async deleteSummary(id: string, token: string) {

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickVid - Summarize Video</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 400px;
+      min-height: 500px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e8f0ff;
+      padding: 0;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4f9cf9 0%, #00d9ff 100%);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(79, 156, 249, 0.3);
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: white;
+    }
+
+    .header p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .video-info {
+      background: rgba(79, 156, 249, 0.1);
+      border: 1px solid rgba(79, 156, 249, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .video-info h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #4f9cf9;
+    }
+
+    .video-info p {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    .button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #4f9cf9 0%, #00d9ff 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(79, 156, 249, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(79, 156, 249, 0.5);
+    }
+
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .summary-container {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(79, 156, 249, 0.2);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .summary-container h3 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #4f9cf9;
+    }
+
+    .summary-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    .summary-text h1,
+    .summary-text h2,
+    .summary-text h3 {
+      color: #e8f0ff;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    .summary-text ul,
+    .summary-text ol {
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    .summary-text li {
+      margin-bottom: 4px;
+    }
+
+    .summary-text strong {
+      color: #e8f0ff;
+      font-weight: 600;
+    }
+
+    .error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+      color: #fca5a5;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      background: rgba(79, 156, 249, 0.2);
+      border: 1px solid rgba(79, 156, 249, 0.3);
+      border-radius: 8px;
+      color: #4f9cf9;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: rgba(79, 156, 249, 0.3);
+      border-color: rgba(79, 156, 249, 0.5);
+    }
+
+    .not-youtube {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .not-youtube svg {
+      width: 64px;
+      height: 64px;
+      color: #4f9cf9;
+      margin-bottom: 16px;
+    }
+
+    .not-youtube h2 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: #e8f0ff;
+    }
+
+    .not-youtube p {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      border-top: 1px solid rgba(79, 156, 249, 0.1);
+      margin-top: 20px;
+    }
+
+    .footer a {
+      color: #4f9cf9;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.4);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(79, 156, 249, 0.5);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(79, 156, 249, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>QuickVid</h1>
+    <p>AI-Powered Video Summaries</p>
+  </div>
+
+  <div id="app" class="container">
+    <div class="not-youtube" id="notYouTube" style="display: none;">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+      <h2>Not on YouTube?</h2>
+      <p>Navigate to a YouTube video page to use QuickVid. Or visit our website to paste any video URL.</p>
+    </div>
+
+    <div id="youtubeContent" style="display: none;">
+      <div class="video-info" id="videoInfo">
+        <h3>Current Video</h3>
+        <p id="videoTitle">Loading...</p>
+      </div>
+
+      <button class="button" id="summarizeBtn">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        Summarize Video
+      </button>
+
+      <div id="summarySection" style="display: none;">
+        <div class="summary-container">
+          <h3>AI Summary</h3>
+          <div class="summary-text" id="summaryText"></div>
+        </div>
+
+        <div class="actions">
+          <button class="action-btn" id="copyBtn">Copy</button>
+          <button class="action-btn" id="openWebBtn">Open in Web</button>
+        </div>
+      </div>
+
+      <div id="errorSection" style="display: none;">
+        <div class="error" id="errorText"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://quickvid.example.com" target="_blank">Visit QuickVid Website</a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
