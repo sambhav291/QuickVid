@@ -89,6 +89,9 @@ export default function HomePage() {
 
   return (
     <div className="relative pt-20 min-h-screen">
+      {/* Semi-transparent overlay for better text visibility on mobile */}
+      <div className="fixed inset-0 bg-gradient-to-b from-gray-900/60 via-gray-900/40 to-gray-900/60 backdrop-blur-sm pointer-events-none md:hidden" style={{ zIndex: -1 }} />
+      
       {/* Hero Section */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div className="text-center mb-8 sm:mb-16 fade-in">
