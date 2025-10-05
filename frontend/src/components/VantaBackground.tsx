@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 // Declare VANTA types for TypeScript to avoid errors
 declare global {
   interface Window {
     VANTA: {
       HALO: (options: Record<string, unknown>) => { destroy: () => void };
+      NET: (options: Record<string, unknown>) => { destroy: () => void };
     };
     THREE: unknown;
   }
@@ -14,6 +15,19 @@ declare global {
 
 const VantaBackground = () => {
   const vantaRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     let vantaEffect: { destroy: () => void } | null = null;
@@ -38,9 +52,11 @@ const VantaBackground = () => {
             minHeight: 200.00,
             minWidth: 200.00,
             backgroundColor: 0x0d1117, // Dark background color
-            amplitudeFactor: 1.20,
+            amplitudeFactor: isMobile ? 0.5 : 1.20, // Reduce on mobile
             xOffset: 0.26,
-            size: 1.5,
+            size: isMobile ? 0.8 : 1.5, // Smaller particles on mobile
+            baseColor: 0x4f9cf9,
+            // Reduce opacity on mobile for better text visibility
           });
         }
       };
@@ -52,9 +68,15 @@ const VantaBackground = () => {
         vantaEffect.destroy();
       }
     };
-  }, []); // Empty dependency array ensures this runs only once
+  }, [isMobile]); // Re-run when mobile state changes
 
-  return <div ref={vantaRef} className="fixed top-0 left-0 w-full h-full -z-10" />;
+  return (
+    <div 
+      ref={vantaRef} 
+      className="fixed top-0 left-0 w-full h-full -z-10"
+      style={{ opacity: isMobile ? 0.4 : 0.7 }} // Reduce opacity on mobile
+    />
+  );
 };
 
 export default VantaBackground;

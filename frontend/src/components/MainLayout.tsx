@@ -9,6 +9,7 @@ declare global {
   interface Window {
     VANTA: {
       NET: (options: Record<string, unknown>) => { destroy: () => void };
+      HALO: (options: Record<string, unknown>) => { destroy: () => void };
     };
   }
 }

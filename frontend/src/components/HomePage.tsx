@@ -90,8 +90,8 @@ export default function HomePage() {
   return (
     <div className="relative pt-20 min-h-screen">
       {/* Hero Section */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16 fade-in">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+        <div className="text-center mb-8 sm:mb-16 fade-in">
           <div className="inline-block mb-4">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm font-medium text-blue-300 border border-blue-500/30">
               <span className="relative flex h-2 w-2">
@@ -102,20 +102,20 @@ export default function HomePage() {
             </span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-4 sm:mb-6 leading-tight">
             <span className="gradient-text glow-text">Transform Videos</span>
             <br />
             <span className="text-white">Into Knowledge</span>
           </h1>
           
-          <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4">
             Experience the future of video learning. Get AI-powered summaries of any YouTube video in seconds. 
             Save time, learn faster, and build your personal knowledge library.
           </p>
         </div>
 
         {/* Input Section */}
-        <div className="max-w-3xl mx-auto mb-16 slide-in">
+        <div className="max-w-3xl mx-auto mb-12 sm:mb-16 slide-in">
           <form onSubmit={handleSummarize} className="relative">
             <div className="glass-card rounded-2xl p-2 glow-effect">
               <div className="flex flex-col sm:flex-row gap-2">

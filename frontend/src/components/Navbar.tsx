@@ -54,6 +54,7 @@ export default function Navbar() {
   const router = useRouter();
   const { session, setShowAuthModal } = useAppContext();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const supabase = createClientComponentClient();
@@ -177,7 +178,7 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2">
                 <button 
                   onClick={() => setShowAuthModal(true)} 
                   className="text-gray-300 hover:text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-blue-500/10 border border-transparent hover:border-blue-500/30"
@@ -192,8 +193,68 @@ export default function Navbar() {
                 </button>
               </div>
             )}
+            
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+              className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-blue-500/10 border border-transparent hover:border-blue-500/30 transition-all"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
+        
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden pb-4 fade-in">
+            <div className="glass-card rounded-xl p-2 space-y-1">
+              <button 
+                onClick={() => { router.push('/'); setMobileMenuOpen(false); }} 
+                className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-blue-500/10 rounded-lg px-4 py-3 text-sm font-medium transition-all border border-transparent hover:border-blue-500/30"
+              >
+                <HomeIcon /> Home
+              </button>
+              <button 
+                onClick={() => { navigateTo('/summaries'); setMobileMenuOpen(false); }} 
+                className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-blue-500/10 rounded-lg px-4 py-3 text-sm font-medium transition-all border border-transparent hover:border-blue-500/30"
+              >
+                <BookmarkIcon /> My Summaries
+              </button>
+              <button 
+                onClick={() => { router.push('/about'); setMobileMenuOpen(false); }} 
+                className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-blue-500/10 rounded-lg px-4 py-3 text-sm font-medium transition-all border border-transparent hover:border-blue-500/30"
+              >
+                <InfoIcon /> About
+              </button>
+              
+              {!session && (
+                <div className="pt-2 border-t border-blue-500/20 space-y-2">
+                  <button 
+                    onClick={() => { setShowAuthModal(true); setMobileMenuOpen(false); }} 
+                    className="w-full text-gray-300 hover:text-white px-4 py-3 rounded-lg text-sm font-medium transition-all hover:bg-blue-500/10 border border-transparent hover:border-blue-500/30"
+                  >
+                    Log In
+                  </button>
+                  <button 
+                    onClick={() => { setShowAuthModal(true); setMobileMenuOpen(false); }} 
+                    className="w-full btn-primary text-white px-4 py-3 rounded-lg text-sm font-bold shadow-lg shadow-blue-500/30"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
